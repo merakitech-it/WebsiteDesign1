@@ -14,6 +14,14 @@
   }
 })();
 
+/* Header border on scroll */
+(function(){
+  const h=document.querySelector('header.site');
+  if(!h)return;
+  const onScroll=()=>{h.style.borderBottomColor=window.scrollY>10?'rgba(255,122,24,.25)':'rgba(255,255,255,.08)';};
+  window.addEventListener('scroll',onScroll,{passive:true});onScroll();
+})();
+
 /* Scroll reveal */
 (function(){
   const els=document.querySelectorAll('.reveal');
@@ -63,25 +71,13 @@
   }));
 })();
 
-/* Header border on scroll */
-(function(){
-  const h=document.querySelector('header.site');
-  if(!h)return;
-  const onScroll=()=>{h.style.borderBottomColor=window.scrollY>10?'rgba(255,122,24,.25)':'rgba(255,255,255,.08)';};
-  window.addEventListener('scroll',onScroll,{passive:true});onScroll();
-})();
-
-/* Contact form (front-end only demo) */
+/* Contact form — real submission with loading state */
 (function(){
   const f=document.getElementById('quoteForm');
   if(!f)return;
-  f.addEventListener('submit',(e)=>{
-    e.preventDefault();
+  f.addEventListener('submit',()=>{
     const btn=f.querySelector('button[type=submit]');
-    const orig=btn.textContent;
-    btn.textContent='Sent ✓';btn.disabled=true;
-    f.reset();
-    setTimeout(()=>{btn.textContent=orig;btn.disabled=false;},2600);
+    btn.textContent='Sending…';btn.disabled=true;
   });
 })();
 
@@ -165,4 +161,17 @@
   },{passive:true});
 
   startAuto();
+})();
+
+/* Company video — click-to-load (zero bytes fetched until user clicks play) */
+(function(){
+  const stage=document.getElementById('videoStage');
+  if(!stage)return;
+  stage.addEventListener('click',function(){
+    const src=stage.dataset.src;
+    const v=document.createElement('video');
+    v.src=src;v.controls=true;v.autoplay=true;v.playsinline=true;
+    stage.innerHTML='';
+    stage.appendChild(v);
+  },{once:true});
 })();
